@@ -7,7 +7,11 @@ authors = [
     { name = "projectw789", email = "projectw789@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "mistralai>=2.9.4",
+    "openai>=3.5.0",
+    "python-dotenv>=1.2.3",
+]
 
 [project.scripts]
 job-application-analysis = "job_application_analysis:main"
