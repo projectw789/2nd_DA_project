@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 from mistralai.client import Mistral
 import os
-from .models import MistralOutput
+import json
+
 
 load_dotenv()
 
@@ -18,9 +19,10 @@ def call_mistral(job_application):
         messages = [
             {
                 "role" : "user",
-                "content" : f"Analyse the following job application. 1. Identify the key skills and requirements in the job description. 2. Identify the skills and relevant experience shown in the candidate profile. 3. Compare the candidate against the job requirements. 4. Identify strong matches and important gaps. 5. Give an overall suitability assessment for the role. 6. Explain your reasoning clearly. Job application data:{job_application}"
+                "content" : f"Analyse the following job application. Identify the key skills and requirements in the job description, the skills and relevant experience shown in the candidate profile, strong matches, important gaps, overall suitability, and your reasoning. Your response must contain exactly these 8 fields: suitability_score (integer from 0 to 100), key_requirements (list of strings), matched_skills (list of strings), missing_skills (list of strings), experience_gap (string), education_match (boolean), assessment (string), reasoning (string). Do not include any additional fields. Job application data: {job_application}"
             }
         ]
     )
+    dictio = json.loads(response.choices[0].message.content)
 
-    return response.choices[0].message.content
+    return dictio
