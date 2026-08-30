@@ -15,8 +15,8 @@ def user_input():
     job_application = {
     "company" : company_input,
     "role" : role_input,
-    "job description" : jobdesc_input,
-    "candidate profile" : candidateprofile_input 
+    "job_description" : jobdesc_input,
+    "candidate_profile" : candidateprofile_input 
 }
 
     return job_application

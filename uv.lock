@@ -168,6 +168,7 @@ source = { editable = "." }
 dependencies = [
     { name = "mistralai" },
     { name = "openai" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
 ]
 
@@ -175,6 +176,7 @@ dependencies = [
 requires-dist = [
     { name = "mistralai", specifier = ">=2.9.4" },
     { name = "openai", specifier = ">=3.5.0" },
+    { name = "pydantic", specifier = ">=2.13.4" },
     { name = "python-dotenv", specifier = ">=1.2.3" },
 ]
 

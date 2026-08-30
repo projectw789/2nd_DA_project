@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from mistralai.client import Mistral
 import os
+from .models import MistralOutput
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ def call_mistral(job_application):
     
     response = mistral_client.chat.complete(
         model = "mistral-small-latest",
+        response_format= {"type": "json_object"},
         messages = [
             {
                 "role" : "user",
