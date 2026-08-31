@@ -11,11 +11,11 @@ class JobApplication(BaseModel):
     
 
 class MistralOutput(BaseModel):
-    suitability_score : int = Field(ge=0, le=100)
+    
     key_requirements : list[str] = Field(min_length=1)
     matched_skills : list[str] 
     missing_skills : list[str] 
-    experience_gap : str = Field(min_length=1)
+    experience_match : bool
     education_match : bool
     assessment : str = Field(min_length=1)
     reasoning : str = Field(min_length=1)
