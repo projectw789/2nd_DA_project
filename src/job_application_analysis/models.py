@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
 
 # uv run python -m job_application_analysis.models
 
@@ -10,12 +11,12 @@ class JobApplication(BaseModel):
     
 
 class MistralOutput(BaseModel):
-    suitability_score : int
-    key_requirements : list[str]
-    matched_skills : list[str]
-    missing_skills : list[str]
-    experience_gap : str
+    suitability_score : int = Field(ge=0, le=100)
+    key_requirements : list[str] = Field(min_length=1)
+    matched_skills : list[str] 
+    missing_skills : list[str] 
+    experience_gap : str = Field(min_length=1)
     education_match : bool
-    assessment : str
-    reasoning : str
+    assessment : str = Field(min_length=1)
+    reasoning : str = Field(min_length=1)
 
