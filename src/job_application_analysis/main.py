@@ -2,11 +2,11 @@ from .user_input_func import user_input
 from .ai_client import call_mistral
 from .models import FinalOutput
 from .scoring import calculate_score
-from . output import display_result
+from .output import display_result
+from .sql_database import save_analysis, show_results
+
 
 user_app_obj = user_input()
-
-
 
 ai_response = call_mistral(user_app_obj)
 
@@ -18,10 +18,13 @@ else:
 
 display_result(final_output)
 
+save_analysis(user_app_obj, final_output)
 
+print("")
+print("")
 
-
-
+results = show_results(final_output)
+print(results)
 
 
 # uv run python -m job_application_analysis.main
