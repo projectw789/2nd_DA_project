@@ -1,5 +1,5 @@
 from .user_input_func import user_input
-from .ai_client import call_mistral
+from .ai_client import call_mistral , call_opro_client
 from .models import FinalOutput
 from .scoring import calculate_score
 from .output import display_result
@@ -8,7 +8,8 @@ from .sql_database import save_analysis, show_results
 
 user_app_obj = user_input()
 
-ai_response = call_mistral(user_app_obj)
+# ai_response = call_mistral(user_app_obj)
+ai_response = call_opro_client(user_app_obj)
 
 if ai_response is None:
     final_output = ("sorry")

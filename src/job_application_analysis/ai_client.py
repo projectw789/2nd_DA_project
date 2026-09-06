@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from mistralai.client import Mistral
+from mistralai.client.errors import SDKError
 import os
 import json
 from .models import MistralOutput
@@ -22,7 +23,7 @@ def call_mistral(job_application):
                 messages = [
                     {
                         "role" : "user",
-                        "content" : f"Analyse the following job application. Identify the key skills and requirements in the job description, the skills and relevant experience shown in the candidate profile, strong matches, important gaps, overall suitability, and your reasoning. Your response must contain exactly these 7 fields: key_requirements (list of strings), matched_skills (list of strings), missing_skills (list of strings), experience_match (boolean), education_match (boolean), assessment (string), reasoning (string). Do not include suitability_score or any additional fields. Job application data: {job_application}"
+                        "content" : f"Analyse the following job application. Identify the key skills and requirements in the job description, the skills and relevant experience shown in the candidate profile, strong matches, important gaps, overall suitability, and your reasoning. Your response must contain exactly these 7 fields: key_requirements (list of strings), matched_skills (list of strings), missing_skills (list of strings), experience_match (boolean), education_match (boolean), assessment (string), reasoning (string). Do not include suitability_score or any additional fields. Ensure the number of matched skills do not exceed the total number of key requirements. Job application data: {job_application}"
                     }
                 ]
             )
@@ -33,10 +34,14 @@ def call_mistral(job_application):
         except ValidationError as e:
             print(e)
             continue
-
         except json.JSONDecodeError as e:
             print(e)
             continue
-
+        except SDKError as e:
+            print(e)
+            continue
+        except Exception as e:
+            print(e)
+            continue
     print("sorry ai issues, try again later")
     return None
