@@ -16,7 +16,7 @@ def call_opro_client(job_application):
     for attempt in range (3):
         try:
             response_object = opro_client.chat.completions.create(
-                model="openai/gpt-oss-20b:free", 
+                model="openrouter/free", 
                 response_format = {"type":"json_object"}, 
                 messages = [
                     { 

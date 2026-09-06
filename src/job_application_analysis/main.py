@@ -1,5 +1,6 @@
 from .user_input_func import user_input
-from .ai_client import call_mistral , call_opro_client
+from .ai_client import call_mistral
+from .OpRo_ai_client import call_opro_client
 from .models import FinalOutput
 from .scoring import calculate_score
 from .output import display_result
