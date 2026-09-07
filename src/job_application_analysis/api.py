@@ -14,6 +14,6 @@ def analyse(user_app_input : JobApplication):
     final_output = choice(ai_response)
     display_result(final_output)
     save_analysis(user_app_input, final_output)
-
+    return final_output
     
     
