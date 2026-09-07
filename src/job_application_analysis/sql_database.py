@@ -1,16 +1,34 @@
 import sqlite3
 import json
 
-sql_connect = sqlite3.Connection("job_app_db.db")
+def database_setup():
+    for attempt in range(3):
+        try:
+            sql_connect = sqlite3.Connection("job_app_db.db")
+            cursor = sql_connect.cursor()
+            cursor.execute(" CREATE TABLE IF NOT EXISTS database( ID INTEGER PRIMARY KEY, COMPANY TEXT, ROLE TEXT, SUITABILITY_SCORE INT, KEY_REQUIREMENTS TEXT, MATCHED_SKILLS TEXT, MISSING_SKILLS TEXT, EXPERIENCE_MATCH INT, EDUCATION_MATCH INT, ASSESSMENT TEXT, REASONING TEXT )")
+            sql_connect.commit()
+            sql_connect.close()
+        except sqlite3.Error as e:
+            print(e)
+            continue
+    return "experiencing unexpected sql errors. apologies"
 
-cursor = sql_connect.cursor()
-
-cursor.execute(" CREATE TABLE IF NOT EXISTS database( ID INTEGER PRIMARY KEY, COMPANY TEXT, ROLE TEXT, SUITABILITY_SCORE INT, KEY_REQUIREMENTS TEXT, MATCHED_SKILLS TEXT, MISSING_SKILLS TEXT, EXPERIENCE_MATCH INT, EDUCATION_MATCH INT, ASSESSMENT TEXT, REASONING TEXT )")
-
-sql_connect.commit()
+def fresh_sql_connect():
+    for attempt in range(3):
+        try:
+            sql_connect = sqlite3.Connection("job_app_db.db")
+            cursor = sql_connect.cursor()
+            return sql_connect, cursor
+        except sqlite3.Error as e:
+            print(e)
+            continue
+    return "experiencing unexpected sql errors. apologies"
 
 
 def save_analysis(job_application, final_output):
+    sql_connect, cursor = fresh_sql_connect()
+
     if final_output == "sorry":
         return ("Database not created.")
     else:
@@ -19,8 +37,11 @@ def save_analysis(job_application, final_output):
         mi_sk_str = json.dumps(final_output.missing_skills)
         cursor.execute("INSERT INTO database (COMPANY, ROLE, SUITABILITY_SCORE, KEY_REQUIREMENTS, MATCHED_SKILLS, MISSING_SKILLS, EXPERIENCE_MATCH, EDUCATION_MATCH, ASSESSMENT, REASONING) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (job_application.company, job_application.role, final_output.suitability_score, key_req_str, ma_sk_str, mi_sk_str, final_output.experience_match, final_output.education_match, final_output.assessment, final_output.reasoning))
         sql_connect.commit()
+        sql_connect.close()
+        
 
 def show_results(final_output):
+    sql_connect, cursor = fresh_sql_connect()
     if final_output == "sorry":
         return ("Database not shown due to AI tehcnical issues.")
     else:
@@ -66,6 +87,7 @@ def show_results(final_output):
             except sqlite3.Error:
                 print("Facing technical issues. Restart the program.")
                 return ("Technical issues, please try again later.")
+    sql_connect.close()
                 
 
 
