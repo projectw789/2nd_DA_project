@@ -3,15 +3,21 @@ import json
 
 def database_setup():
     for attempt in range(3):
+        sql_connect, cursor = (None, None)
         try:
             sql_connect = sqlite3.Connection("job_app_db.db")
             cursor = sql_connect.cursor()
             cursor.execute(" CREATE TABLE IF NOT EXISTS database( ID INTEGER PRIMARY KEY, COMPANY TEXT, ROLE TEXT, SUITABILITY_SCORE INT, KEY_REQUIREMENTS TEXT, MATCHED_SKILLS TEXT, MISSING_SKILLS TEXT, EXPERIENCE_MATCH INT, EDUCATION_MATCH INT, ASSESSMENT TEXT, REASONING TEXT )")
             sql_connect.commit()
-            sql_connect.close()
+            
+            return "database succesfully created"
         except sqlite3.Error as e:
             print(e)
             continue
+        finally:
+            if sql_connect is not None:
+                sql_connect.close()
+
     raise sqlite3.Error("experiencing unexpected sql errors. apologies")
 
 
@@ -32,7 +38,7 @@ def save_analysis(job_application, final_output):
         return ("Database not created.")
     else:
         for attempt in range(3):
-            sql_connect, cursor = (False, False)
+            sql_connect, cursor = (None, None)
             try:
                 sql_connect, cursor = fresh_sql_connect()
                 key_req_str = json.dumps(final_output.key_requirements)
@@ -46,9 +52,9 @@ def save_analysis(job_application, final_output):
                 print(e)
                 continue
             finally:
-                if sql_connect != False:
+                if sql_connect is not None:
                     sql_connect.close()
-        raise sqlite3.Error("Analysis and input not saved to database due to technical error.please try again later.")
+        return "Analysis and input not saved to database due to technical error.please try again later."
         
 
 def show_results(final_output):
@@ -59,7 +65,7 @@ def show_results(final_output):
             user_choice = input("Would you like to view the database of results? (Answer as Yes or No) ")
             print("")
             print("")
-            sql_connect, cursor = (False, False)
+            sql_connect, cursor = (None, None)
             try:
                 sql_connect, cursor = fresh_sql_connect()
                 b_user_choice = user_choice.lower()
@@ -101,10 +107,10 @@ def show_results(final_output):
                 return ("Technical issues, please try again later.")
 
             finally:
-                if sql_connect != False:
+                if sql_connect is not None:
                     sql_connect.close()
                 
-        raise sqlite3.Error("Database not shown due to tehcnical errors. plase try again later")
+        return "Database not shown due to tehcnical errors. plase try again later"
 
 
 
