@@ -19,5 +19,6 @@ def analyse(user_app_input : JobApplication):
 @fastapi_obj.get("/viewdatabase")
 def view_database():
     show_results_api_ver()
+
     
     
