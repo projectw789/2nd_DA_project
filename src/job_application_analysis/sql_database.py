@@ -117,7 +117,8 @@ def show_results(final_output):
 def show_results_api_ver():
 
     for attempt in range(2):
-        
+        api_dict = {}
+        i = 0
         sql_connect, cursor = (None, None)
         try:
             sql_connect, cursor = fresh_sql_connect()
@@ -139,12 +140,19 @@ def show_results_api_ver():
                     python_mi_sk = "missing skills data error"
                 python_ex_ma = bool(row[7])
                 python_ed_ma = bool(row[8])
-                row = f"ID: {row[0]} \nCompany: {row[1]} \nRole: {row[2]} \nSuitability Score: {row[3]} \nKey Requirements: {python_key_req} \nMatched Skills: {python_ma_sk} \nMissing Skills: {python_mi_sk} \nExperience Match : {python_ex_ma} \nEducation Match: {python_ed_ma} \nAssessment: {row[9]} \nReasoning: {row[10]}"
-                return row
+                entry_row = f"ID: {row[0]} \nCompany: {row[1]} \nRole: {row[2]} \nSuitability Score: {row[3]} \nKey Requirements: {python_key_req} \nMatched Skills: {python_ma_sk} \nMissing Skills: {python_mi_sk} \nExperience Match : {python_ex_ma} \nEducation Match: {python_ed_ma} \nAssessment: {row[9]} \nReasoning: {row[10]}"
+                api_dict[f"entry no. {i}"] = entry_row
+                i=i+1
+            return api_dict
+                
                    
         except sqlite3.Error as e:
             print(e)
-            return ("Technical issues, please try again later.")
+            continue
+
+        except Exception as e:
+            print(e)
+            continue
 
         finally:
             if sql_connect is not None:
