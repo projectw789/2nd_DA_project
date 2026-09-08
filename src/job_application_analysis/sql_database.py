@@ -126,6 +126,7 @@ def show_results_api_ver():
             cursor.execute("SELECT * FROM database") 
             whole_database = cursor.fetchall() 
             for row in whole_database:
+                api_dict[f"entry no.{i}"] = {}
                 try:
                     python_key_req = json.loads(row[4])   
                     python_ma_sk = json.loads(row[5])   
@@ -140,11 +141,19 @@ def show_results_api_ver():
                     python_mi_sk = "missing skills data error"
                 python_ex_ma = bool(row[7])
                 python_ed_ma = bool(row[8])
-                entry_row = f"ID: {row[0]} \nCompany: {row[1]} \nRole: {row[2]} \nSuitability Score: {row[3]} \nKey Requirements: {python_key_req} \nMatched Skills: {python_ma_sk} \nMissing Skills: {python_mi_sk} \nExperience Match : {python_ex_ma} \nEducation Match: {python_ed_ma} \nAssessment: {row[9]} \nReasoning: {row[10]}"
-                api_dict[f"entry no. {i}"] = entry_row
-                i=i+1
-            return api_dict
-                
+                api_dict[f"entry no.{i}"]["ID"] = row[0]
+                api_dict[f"entry no.{i}"]["Company"] = row[1]
+                api_dict[f"entry no.{i}"]["Role"] = row[2]
+                api_dict[f"entry no.{i}"]["Suitability Score"] = row[3]
+                api_dict[f"entry no.{i}"]["Key Requirements"] = python_key_req
+                api_dict[f"entry no.{i}"]["Matched Skills"] = python_ma_sk
+                api_dict[f"entry no.{i}"]["Missing Skills"] = python_mi_sk
+                api_dict[f"entry no.{i}"]["Experience Match"] = python_ex_ma
+                api_dict[f"entry no.{i}"]["Education Match"] = python_ed_ma
+                api_dict[f"entry no.{i}"]["Assessment"] = row[9]
+                api_dict[f"entry no.{i}"]["Reasoning"] = row[10]
+                i = i+1
+            return api_dict             
                    
         except sqlite3.Error as e:
             print(e)
