@@ -114,5 +114,43 @@ def show_results(final_output):
 
 
 
+def show_results_api_ver():
+
+    for attempt in range(2):
+        
+        sql_connect, cursor = (None, None)
+        try:
+            sql_connect, cursor = fresh_sql_connect()
+                
+            cursor.execute("SELECT * FROM database") 
+            whole_database = cursor.fetchall() 
+            for row in whole_database:
+                try:
+                    python_key_req = json.loads(row[4])   
+                    python_ma_sk = json.loads(row[5])   
+                    python_mi_sk = json.loads(row[6])
+                except json.JSONDecodeError:
+                    python_key_req = "key req data error"
+                    python_ma_sk = "matched skills data error"
+                    python_mi_sk = "missing skills data error"
+                except TypeError:
+                    python_key_req = "key req data error"
+                    python_ma_sk = "matched skills data error"
+                    python_mi_sk = "missing skills data error"
+                python_ex_ma = bool(row[7])
+                python_ed_ma = bool(row[8])
+                row = f"ID: {row[0]} \nCompany: {row[1]} \nRole: {row[2]} \nSuitability Score: {row[3]} \nKey Requirements: {python_key_req} \nMatched Skills: {python_ma_sk} \nMissing Skills: {python_mi_sk} \nExperience Match : {python_ex_ma} \nEducation Match: {python_ed_ma} \nAssessment: {row[9]} \nReasoning: {row[10]}"
+                return row
+                   
+        except sqlite3.Error as e:
+            print(e)
+            return ("Technical issues, please try again later.")
+
+        finally:
+            if sql_connect is not None:
+                sql_connect.close()
+                
+    return "Database not shown due to tehcnical errors. plase try again later"
+
 
 # uv run python -m job_application_analysis.sql_database
