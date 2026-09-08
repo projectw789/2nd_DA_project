@@ -12,36 +12,46 @@ def database_setup():
         except sqlite3.Error as e:
             print(e)
             continue
-    return "experiencing unexpected sql errors. apologies"
+    raise sqlite3.Error("experiencing unexpected sql errors. apologies")
+
 
 def fresh_sql_connect():
-    for attempt in range(3):
-        try:
-            sql_connect = sqlite3.Connection("job_app_db.db")
-            cursor = sql_connect.cursor()
-            return sql_connect, cursor
-        except sqlite3.Error as e:
-            print(e)
-            continue
-    return "experiencing unexpected sql errors. apologies"
+
+    sql_connect = sqlite3.Connection("job_app_db.db")
+    cursor = sql_connect.cursor()
+    return sql_connect, cursor
+
+    
+
+    
 
 
 def save_analysis(job_application, final_output):
-    sql_connect, cursor = fresh_sql_connect()
 
     if final_output == "sorry":
         return ("Database not created.")
     else:
-        key_req_str = json.dumps(final_output.key_requirements)
-        ma_sk_str = json.dumps(final_output.matched_skills)
-        mi_sk_str = json.dumps(final_output.missing_skills)
-        cursor.execute("INSERT INTO database (COMPANY, ROLE, SUITABILITY_SCORE, KEY_REQUIREMENTS, MATCHED_SKILLS, MISSING_SKILLS, EXPERIENCE_MATCH, EDUCATION_MATCH, ASSESSMENT, REASONING) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (job_application.company, job_application.role, final_output.suitability_score, key_req_str, ma_sk_str, mi_sk_str, final_output.experience_match, final_output.education_match, final_output.assessment, final_output.reasoning))
-        sql_connect.commit()
-        sql_connect.close()
+        for attempt in range(3):
+            sql_connect, cursor = (False, False)
+            try:
+                sql_connect, cursor = fresh_sql_connect()
+                key_req_str = json.dumps(final_output.key_requirements)
+                ma_sk_str = json.dumps(final_output.matched_skills)
+                mi_sk_str = json.dumps(final_output.missing_skills)
+                cursor.execute("INSERT INTO database (COMPANY, ROLE, SUITABILITY_SCORE, KEY_REQUIREMENTS, MATCHED_SKILLS, MISSING_SKILLS, EXPERIENCE_MATCH, EDUCATION_MATCH, ASSESSMENT, REASONING) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (job_application.company, job_application.role, final_output.suitability_score, key_req_str, ma_sk_str, mi_sk_str, final_output.experience_match, final_output.education_match, final_output.assessment, final_output.reasoning))
+                sql_connect.commit()
+                
+                return "Analysis and input saved to database"
+            except sqlite3.Error as e:
+                print(e)
+                continue
+            finally:
+                if sql_connect != False:
+                    sql_connect.close()
+        raise sqlite3.Error("Analysis and input not saved to database due to technical error.please try again later.")
         
 
 def show_results(final_output):
-    sql_connect, cursor = fresh_sql_connect()
     if final_output == "sorry":
         return ("Database not shown due to AI tehcnical issues.")
     else:
@@ -49,7 +59,9 @@ def show_results(final_output):
             user_choice = input("Would you like to view the database of results? (Answer as Yes or No) ")
             print("")
             print("")
+            sql_connect, cursor = (False, False)
             try:
+                sql_connect, cursor = fresh_sql_connect()
                 b_user_choice = user_choice.lower()
                 if b_user_choice == "yes": 
                     cursor.execute("SELECT * FROM database") 
@@ -87,9 +99,12 @@ def show_results(final_output):
             except sqlite3.Error:
                 print("Facing technical issues. Restart the program.")
                 return ("Technical issues, please try again later.")
-    sql_connect.close()
-                
 
+            finally:
+                if sql_connect != False:
+                    sql_connect.close()
+                
+        raise sqlite3.Error("Database not shown due to tehcnical errors. plase try again later")
 
 
 
