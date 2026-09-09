@@ -1,5 +1,3 @@
-
-
 def calculate_score(key_requirements, matched_skills, experience_match, education_match ):
     if key_requirements == []:
         score_1 = 0
