@@ -20,4 +20,5 @@ def test_choice_ai_success():
     mock_ai_obj = OpRoOutput(**mock_ai_output)
     mock_final_obj = choice(mock_ai_obj)
     assert isinstance(mock_final_obj, FinalOutput)
+    assert mock_final_obj.suitability_score == 80
 
