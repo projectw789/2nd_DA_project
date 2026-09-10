@@ -169,7 +169,7 @@ def show_results_api_ver():
             if sql_connect is not None:
                 sql_connect.close()
                 
-    return "Database not shown due to tehcnical errors. plase try again later"
+    return False
 
 
 # uv run python -m job_application_analysis.sql_database
