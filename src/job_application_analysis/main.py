@@ -1,7 +1,7 @@
 from .user_input_func import user_input
 from .OpRo_ai_client import call_opro_client
 from .output import display_result
-from .sql_database import save_analysis, show_results
+from .sql_database import save_analysis, show_results, database_setup
 from .choice import choice
 
 user_app_obj = user_input()
@@ -12,6 +12,8 @@ ai_response = call_opro_client(user_app_obj)
 
 
 final_output = choice(ai_response)
+
+database_setup()
 
 display_result(final_output)
 

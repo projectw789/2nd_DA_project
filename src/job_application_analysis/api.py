@@ -3,16 +3,21 @@ from .models import JobApplication
 from .OpRo_ai_client import call_opro_client
 from .choice import choice
 from .output import display_result
-from .sql_database import save_analysis, show_results_api_ver
+from .sql_database import save_analysis, show_results_api_ver, database_setup
+from contextlib import asynccontextmanager
 
+@asynccontextmanager
+async def uvicorn_lifespan(app: FastAPI):
+    database_setup()
+    yield
 
-fastapi_obj = FastAPI()
+fastapi_obj = FastAPI(lifespan = uvicorn_lifespan)
 
 @fastapi_obj.post("/analyse")
 def analyse(user_app_input : JobApplication):
     ai_response = call_opro_client(user_app_input)
 
-    if ai_response == None:
+    if ai_response is None:
         response = {
             "analysis" : False,
             "database_save" : False,
@@ -21,10 +26,10 @@ def analyse(user_app_input : JobApplication):
         return response
 
     final_output = choice(ai_response)
-    display_result(final_output)
+    
     saved_results = save_analysis(user_app_input, final_output)
 
-    if saved_results == "Analysis and input not saved to database due to technical error.please try again later.":
+    if saved_results == False:
         response = {
             "analysis" : final_output,
             "database_save" : False,
