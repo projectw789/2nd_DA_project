@@ -31,21 +31,21 @@ Testing (via pytest)
 
 ## How to run
 
-get api key
-.env set up
-uv set up
-download required packages
-can use CLI command or uvicorn command (then run code via api at website)
+- get api key
+- .env set up
+- uv set up
+- download required packages
+- can use CLI command or uvicorn command (then run code via api at website)
 
 ## Engineering decisions
 
-Pydantic = input, intermediary and output validation against structured layout
-LLM = artifical intelligence assessment of candidates' job suitability
-Python Scoring = Repeatable and quantitative scoring evaluation rather than unpredictable and non-repeatable qualitative scoring evaluations via LLM.
-SQLite = persistent local data storage for job analyses
-FastAPI = allows application functionality through HTTP API
-pytest = automated verification and testing of individual functions and components
-error handling = handling predictable and common errors smoothly
+- Pydantic = input, intermediary and output validation against structured layout
+- LLM = artifical intelligence assessment of candidates' job suitability
+- Python Scoring = Repeatable and quantitative scoring evaluation rather than unpredictable and non-repeatable qualitative scoring evaluations via LLM.
+- SQLite = persistent local data storage for job analyses
+- FastAPI = allows application functionality through HTTP API
+- pytest = automated verification and testing of individual functions and components
+- error handling = handling predictable and common errors smoothly
 
 ## Limitations
 
