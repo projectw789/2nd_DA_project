@@ -47,5 +47,5 @@ def view_database():
     
     return output
 
-    
-    
+
+# uv run uvicorn job_application_analysis.api:fastapi_obj --reload
