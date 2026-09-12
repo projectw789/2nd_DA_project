@@ -54,7 +54,7 @@ def save_analysis(job_application, final_output):
             finally:
                 if sql_connect is not None:
                     sql_connect.close()
-        print("Analysis and input not saved to database due to technical error.please try again later.")
+        print("Analysis and input not saved to database due to technical error. please try again later.")
         save_fail = False
         return save_fail
         

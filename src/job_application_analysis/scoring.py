@@ -7,8 +7,10 @@ def calculate_score(key_requirements, matched_skills, experience_match, educatio
         if len(matched_skills )== 0:
             print("Candidate does not have any of the required skills")
             score_1 = 0
-        else:
+        elif len(matched_skills) <= len(key_requirements):
             score_1 = len(matched_skills)/len(key_requirements) * 50
+        else:
+            score_1 = 50
 
     if experience_match == True:
         score_2 = 30

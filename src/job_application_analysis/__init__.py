@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from job-application-analysis!")
+from .main import main

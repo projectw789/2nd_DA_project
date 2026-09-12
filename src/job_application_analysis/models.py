@@ -10,15 +10,7 @@ class JobApplication(BaseModel):
     candidate_profile : str
     
 
-class MistralOutput(BaseModel):
-    
-    key_requirements : list[str] = Field(min_length=1)
-    matched_skills : list[str] 
-    missing_skills : list[str] 
-    experience_match : bool
-    education_match : bool
-    assessment : str = Field(min_length=1)
-    reasoning : str = Field(min_length=1)
+
 
 class OpRoOutput(BaseModel):
     
