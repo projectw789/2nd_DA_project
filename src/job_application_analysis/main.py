@@ -6,7 +6,7 @@ from .choice import choice
 
 user_app_obj = user_input()
 
-# ai_response = call_mistral(user_app_obj)
+
 ai_response = call_opro_client(user_app_obj)
 
 

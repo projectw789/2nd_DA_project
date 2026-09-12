@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from .models import JobApplication
 from .OpRo_ai_client import call_opro_client
 from .choice import choice
-from .output import display_result
 from .sql_database import save_analysis, show_results_api_ver, database_setup
 from contextlib import asynccontextmanager
 

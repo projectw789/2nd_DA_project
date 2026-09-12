@@ -65,5 +65,5 @@ def call_opro_client(job_application):
         except Exception as e:
             print(e)
             continue
-    print("sorry ai issues, try again later")
+    print("experiencing LLM issues, please try again later")
     return None

@@ -32,7 +32,7 @@ class OpRoOutput(BaseModel):
 
 class FinalOutput(BaseModel):
 
-    suitability_score : int
+    suitability_score : int = Field(ge = 0, le = 100)
     key_requirements : list[str]
     matched_skills : list[str]
     missing_skills : list[str]
